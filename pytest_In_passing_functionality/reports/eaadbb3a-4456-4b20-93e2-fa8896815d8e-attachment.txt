@@ -1,0 +1,8 @@
+Inapssing login page showing In Passing
+email is entered
+password is entered
+this drop down is single select
+role selected: 
+ login button successful 
+Number of <h4> elements found: 8
+Change History clicked

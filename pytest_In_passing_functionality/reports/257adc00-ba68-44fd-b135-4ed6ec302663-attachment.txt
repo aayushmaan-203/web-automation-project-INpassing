@@ -1,0 +1,25 @@
+Inapssing login page showing In Passing
+email is entered
+password is entered
+this drop down is single select
+role selected: 
+ login button successful 
+my legacy
+click on will 
+add will
+click on edit existing row icon
+This dropdown is not multiselect
+Selected option executor and trustee: Deepak Sharma (Friend)
+btnUpdate1 is clicked
+click on add icon
+selected option executor and trustee: Neeraj Igspectrum (Family)
+edit icon is clicked
+Selected update option executor and trustee: Test01 sars (Solicitor)
+This dropdown is not multiselect
+Selected option Rathi Dikhsa (Contact person) as executor in their place:
+Selected update option: Neeraj Igspectrum (Family)
+Selected option Test01 sars (Solicitor): dies before me I appoint
+Selected option Test04 sars (Spouse): dies before me I appoint
+click on add button
+select dropdown7 click
+Dropdown is disabled
