@@ -11,16 +11,23 @@ from selenium.common.exceptions import ElementClickInterceptedException, NoSuchE
 @pytest.mark.usefixtures()
 class Test_Mylegacy_Page_Icon:
 
-    def test_my_legacy_will (self):
+    @pytest.fixture()
+    def test_legacy(self):
 
         self.driver.find_element(By.XPATH, "//h4[starts-with(text(),'My Legacy')]").click()
-        print("my legacy ICON")
+        print("my legacy")
 
         self.driver.find_element(By.XPATH,"//h4[normalize-space()='My Will']").click()
-        print("click on will ICON ")
+        print("click on my will ")
         time.sleep(5)
 
+        self.driver.find_element(By.XPATH,"//a[@class='btn btn-success btn-rounded' or  @href= '/inpassing/(S(aw2rgvxeeampa0j41rpptfda))/Legacy/Last_Will_Testament?UType=User style']").click()
+        print("add will")
         time.sleep(5)
+
+#__________________________________form filling__________________________________________________________
+
+    def test_my_legacy_will (self,test_legacy):
 
         try:
             element = self.driver.find_element(By.XPATH,"//a[@class='btn btn-success btn-rounded' or  @href= '/inpassing/(S(aw2rgvxeeampa0j41rpptfda))/Legacy/Last_Will_Testament?UType=User style']")
@@ -133,14 +140,10 @@ class Test_Mylegacy_Page_Icon:
         self.driver.execute_script("window.scrollTo(0,250);")
         time.sleep(5)
 
-    def test_my_children_under_eighteen_years_age(self):
-        self.driver.find_element(By.XPATH, "//h4[starts-with(text(),'My Legacy')]").click()
-        print("my legacy")
-        self.driver.find_element(By.XPATH,"//h4[normalize-space()='My Will").click()
-        print("click on will ")
-        time.sleep(5)
-        self.driver.find_element(By.XPATH,"//a[@class='btn btn-success btn-rounded' or  @href= '/inpassing/(S(aw2rgvxeeampa0j41rpptfda))/Legacy/Last_Will_Testament?UType=User style']").click()
-        print("add will")
+#########################################################################################################################################
+
+    def test_my_children_under_eighteen_years_age(self,test_legacy):
+
         self.driver.execute_script("window.scrollTo(0,0);")
         time.sleep(5)
         # click on Add button
@@ -155,32 +158,23 @@ class Test_Mylegacy_Page_Icon:
             print("Click intercepted. Trying JS click as fallback.")
         time.sleep(8)
 
-        select = Select(self.driver.find_element(By.CSS_SELECTOR,"#PeopleName1"))
+        select = Select(self.driver.find_element(By.CSS_SELECTOR,"#PeopleName0"))
         print("select dropdown7 click")
         # self.driver.execute_script("arguments[0].removeAttribute('ng-disabled')", select)
         select.select_by_visible_text("JAI SINGH (LIC INDIA)")
         print(select.first_selected_option.text)
         time.sleep(2)
         action = ActionChains(self.driver)
-        element = self.driver.find_element(By.XPATH,"(//button[@id='btnSave3'])[2]")
+        element = self.driver.find_element(By.XPATH,"((//button[@id='btnSave3'])[1])")
         action.move_to_element(element)
         action.click()
         action.perform()
         print("click on save icon",f"{select.first_selected_option.text}as Guardians of any of my children under eighteen years of age")
         time.sleep(5)
 
-    def test_gifts_of_money(self):
+###################################################################################################################################
 
-        self.driver.find_element(By.XPATH, "//h4[starts-with(text(),'My Legacy')]").click()
-        print("my legacy")
-
-        self.driver.find_element(By.XPATH,"//h4[normalize-space()='My Will']").click()
-        print("click on my will ")
-        time.sleep(5)
-
-        self.driver.find_element(By.XPATH,"//a[@class='btn btn-success btn-rounded' or  @href= '/inpassing/(S(aw2rgvxeeampa0j41rpptfda))/Legacy/Last_Will_Testament?UType=User style']").click()
-        print("add will")
-        time.sleep(5)
+    def test_gifts_of_money(self,test_legacy):
         # to find add button in gifts of money
         try:
             element = self.driver.find_element(By.ID, "btnAddOwnerSample_4")
@@ -247,6 +241,69 @@ class Test_Mylegacy_Page_Icon:
             print("not enabled")
 
         # self.driver.find_element(By.CSS_SELECTOR,"#btnUpdate4").click()
+        time.sleep(5)
+#________________________________________personal property________________________________________________________________
+
+    def test_personal_property(self,test_legacy):
+        # gift to personal property
+        element1 = self.driver.find_element(By.CSS_SELECTOR, "button[id='btnAddOwnerSample_5'] i[class='fa fa-plus']")
+        wait = WebDriverWait(self.driver, 10, poll_frequency=2,
+                                 ignored_exceptions=[NoSuchElementException, TimeoutException, Exception])
+        wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "button[id='btnAddOwnerSample_5'] i[class='fa fa-plus']")))  # <- Fixed argument here
+        element1.click()
+
+        # Select dropdown interaction in personal property
+        action = ActionChains(self.driver)
+        select_element = self.driver.find_element(By.XPATH, "//tr[@ng-repeat='l in Gifts_Of_PersonalPropertyList']//select[@id='PeopleName0']")
+        action.move_to_element(select_element).click().perform()
+
+        # Create Select object
+        select: Select = Select(select_element)
+
+        # Check if the element is enabled
+        if select_element.is_enabled():
+            print("enabled")
+
+            # Print all dropdown options
+            for option in select.options:
+                print(option.text)
+
+        # Select by visible text
+        select.select_by_visible_text("diksha tawar (Former spouse)")
+        print("Selected:", select.first_selected_option.text)
+#_______________________________________________select item category____________________________
+
+        select_element1 = self.driver.find_element(By.XPATH, "//select[@id='AssetsCategory50']")
+        action.move_to_element(select_element1).click().perform()
+
+        # Create Select object
+        select: Select = Select(select_element1)
+
+        # Check if the element is enabled
+        if select_element.is_enabled():
+            print("enabled")
+
+            # Print all dropdown options
+            for option in select.options:
+                print(option.text)
+
+        # Select by visible text
+        select.select_by_visible_text("Savings and investments")
+        print("Selected:", select.first_selected_option.text)
+
+        # ________________________select item to be given________________
+
+        select_element2 = self.driver.find_element(By.XPATH, "//select[@id='ItemToBeGiven50']")
+        action.move_to_element(select_element2).click().perform()
+
+        # Create Select object
+        select: Select = Select(select_element2)
+
+        select.select_by_visible_text("Company shareholding (50 PERCENT)")
+        print("Selected:", select.first_selected_option.text)
+
+        self.driver.find_element(By.CSS_SELECTOR, "#btnSave5").click()
+
         time.sleep(5)
 
 
