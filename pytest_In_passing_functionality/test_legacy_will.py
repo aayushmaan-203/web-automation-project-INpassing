@@ -252,7 +252,7 @@ class Test_Mylegacy_Page_Icon:
         wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "button[id='btnAddOwnerSample_5'] i[class='fa fa-plus']")))  # <- Fixed argument here
         element1.click()
 
-        # Select dropdown interaction in personal property
+        # Select dropdown interaction in personal property name & relationship
         action = ActionChains(self.driver)
         select_element = self.driver.find_element(By.XPATH, "//tr[@ng-repeat='l in Gifts_Of_PersonalPropertyList']//select[@id='PeopleName0']")
         action.move_to_element(select_element).click().perform()
@@ -303,6 +303,57 @@ class Test_Mylegacy_Page_Icon:
         print("Selected:", select.first_selected_option.text)
 
         self.driver.find_element(By.CSS_SELECTOR, "#btnSave5").click()
+
+        #_____________________________________ add new row_________________________________________
+
+        element1 = self.driver.find_element(By.CSS_SELECTOR, "button[id='btnAddOwnerSample_5'] i[class='fa fa-plus']")
+        wait = WebDriverWait(self.driver, 10, poll_frequency=2,
+                                 ignored_exceptions=[NoSuchElementException, TimeoutException, Exception])
+        wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "button[id='btnAddOwnerSample_5'] i[class='fa fa-plus']")))  # <- Fixed argument here
+        element1.click()
+
+        action = ActionChains(self.driver)
+        select_element = self.driver.find_element(By.XPATH, "//tr[@ng-repeat='l in Gifts_Of_PersonalPropertyList']//select[@id='PeopleName1']")
+        action.move_to_element(select_element).click().perform()
+
+        # Create Select object
+        select: Select = Select(select_element)
+
+        # Check if the element is enabled
+        if select_element.is_enabled():
+            print("enabled")
+
+            # Print all dropdown options
+            for option in select.options:
+                print(option.text)
+
+        # Select by visible text
+        select.select_by_visible_text("Neeraj Igspectrum (Cousin)")
+        print("Selected:", select.first_selected_option.text)
+
+        # _______________________________________________select item category____________________________
+        select_element1 = self.driver.find_element(By.XPATH, "//select[@id='AssetsCategory51']")
+        action.move_to_element(select_element1).click().perform()
+
+        # Create Select object
+        select: Select = Select(select_element1)
+
+        select.select_by_visible_text("Life insurance")
+        print("Selected:", select.first_selected_option.text)
+
+
+        # ________________________select item to be given________________
+
+        select_element2 = self.driver.find_element(By.XPATH, "//select[@id='ItemToBeGiven51']")
+        action.move_to_element(select_element2).click().perform()
+
+        # Create Select object
+        select: Select = Select(select_element2)
+
+        select.select_by_visible_text("COOPERATIVE (TARUN)")
+        print("Selected:", select.first_selected_option.text)
+
+        self.driver.find_element(By.XPATH, "(//button[@id='btnSave5'])[2]").click()
 
         time.sleep(5)
 
