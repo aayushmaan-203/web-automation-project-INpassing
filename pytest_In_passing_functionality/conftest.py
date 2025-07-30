@@ -3,26 +3,41 @@ import pytest
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
+from selenium.webdriver.edge.service import Service as EdgeService
+from webdriver_manager.microsoft import EdgeChromiumDriverManager
+from selenium.webdriver.chrome.service import Service as ChromeService
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.firefox.service import Service as FirefoxService
+from webdriver_manager.firefox import GeckoDriverManager
 
+# addoption should only define the CLI argument.
+def pytest_addoption(parser):
+    parser.addoption("--browser",action="store", default="chrome", help="Browser name: chrome/firefox/edge")
 
-
-# def pytest_addoption(parser):
-#     parser.addoption("--browser")
-
+#Chrome Option(headless) Inside Your Fixture
 @pytest.fixture(scope="function",autouse=True)
 def test_setup_and_tear_down(request):
-    driver = webdriver.Chrome()
-    # brwsr = request.config.getoption("--browser")
-    # if brwsr == "chrome":
-    #     driver = webdriver.Chrome()
-    #
-    # elif brwsr == "firefox":
-    #     driver = webdriver.Firefox()
-    #
-    # elif brwsr == "edge":
-    #     driver = webdriver.Edge()
-    # else:
-    #     print("not valid browser")
+    # driver = webdriver.Chrome()
+    driver = None
+    browser = request.config.getoption("--browser")
+    if browser == "chrome":
+        chrome_options = webdriver.ChromeOptions()
+        # chrome_options.add_argument("--headless")
+        chrome_options.add_argument("--start-maximized")
+        driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()),options=chrome_options)
+
+    elif browser == "firefox":
+        firefox_options = webdriver.FirefoxOptions()
+        firefox_options.add_argument("--headless")
+        driver = webdriver.Firefox(service=FirefoxService(GeckoDriverManager().install(),options=firefox_options))
+
+    elif browser == "edge":
+        edge_options = webdriver.EdgeOptions()
+        edge_options.add_argument("--headless=new")
+        driver = webdriver.Edge(service=EdgeService(EdgeChromiumDriverManager().install(),options=edge_options))
+    else:
+        raise ValueError (f"❌ Unsupported browser: {browser}")
+
     # Open your application
     driver.get("http://20.77.0.8/inpassing")
     print("Inapssing login page showing", driver.title)
@@ -33,6 +48,7 @@ def test_setup_and_tear_down(request):
 
     # Set the driver for the test class
     request.cls.driver = driver
+
 
     # enter mail id
     email_id = driver.find_element(By.XPATH, "//input[@placeholder='Enter Email ID']")
@@ -75,10 +91,11 @@ def test_setup_and_tear_down(request):
     login_button = driver.find_element(By.XPATH,
                                        "//input[@class='btn btn-block btn-primary btn-rounded  btn-lg font-weight-medium auth-form-btn']")
     login_button.click()
-
     print(" login button successful ")
 
-    submit_button = driver.find_element(By.ID,'btnsubmit')
+    # otp submit button
+
+    submit_button = driver.find_element(By.XPATH,"//input[@id='btnsubmit']")
     submit_button.click()
     print("click on submit button")
     time.sleep(1)
@@ -91,3 +108,4 @@ def test_setup_and_tear_down(request):
     print("logut successfull")
     time.sleep(1)
     driver.quit()
+
