@@ -8,8 +8,10 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import ElementClickInterceptedException, NoSuchElementException, TimeoutException
 
+
+
 @pytest.mark.usefixtures()
-class Test_Mylegacy_Page_Icon:
+class Test_Mylegacy_Page:
 
     @pytest.fixture()
     def test_legacy(self):
@@ -479,8 +481,7 @@ class Test_Mylegacy_Page_Icon:
 
         self.driver.find_element(By.ID, "btnUpdate6").click()
 
-
-    def test_reiduaryamount(self,test_legacy):
+    def test_residuary_amount(self,test_legacy):
 
         element1 = self.driver.find_element(By.XPATH, "//button[@id='btnAddOwnerSample_7']//span[contains(text(),'Add')]")
         wait = WebDriverWait(self.driver, 10, poll_frequency=2,
@@ -490,14 +491,14 @@ class Test_Mylegacy_Page_Icon:
 
         # Select dropdown interaction in residuary estate name & relationship
         action = ActionChains(self.driver)
-        select_element = self.driver.find_element(By.XPATH, "//tr[@ng-repeat='l in Residuary_Estate_List']//select[@id='PeopleName0']")
-        action.move_to_element(select_element).click().perform()
+        select_element9 = self.driver.find_element(By.XPATH, "//tr[@ng-repeat='l in Residuary_Estate_List']//select[@id='PeopleName0']")
+        action.move_to_element(select_element9).click().perform()
 
         # Create Select object
-        select: Select = Select(select_element)
+        select: Select = Select(select_element9)
 
         # Check if the element is enabled
-        if select_element.is_enabled():
+        if select_element9.is_enabled():
             print("enabled")
 
             # Print all dropdown options
